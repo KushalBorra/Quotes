@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios"
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -6,10 +7,38 @@ import Button from "@mui/material/Button";
 import "./App.css";
 
 const App = () => {
-  const [age, setAge] = React.useState("");
+  const [category, setCategory] = React.useState("");
+  const [quote, setQuote] = React.useState("");
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setCategory(event.target.value);
+  };
+
+  const buttonclick = () => {
+    if (category === 'random') {
+      const options = {
+        method: 'GET',
+        url: 'https://api.quotable.io/quotes/random'
+      };
+      axios.request(options).then(function (response) {
+        setQuote(response.data[0]?.content)
+      }).catch(function (error) {
+        console.error(error);
+      });
+    } else {
+      const options = {
+        method: 'GET',
+        url: `https://api.quotable.io/quotes?tags=${category}`
+      };
+      axios.request(options).then(function (response) {
+        const randNum = Math.random() * (response.data.results.length - 0) + 0;
+        const ind = Math.floor(randNum);
+        setQuote(response.data.results[ind].content)
+      }).catch(function (error) {
+        console.error(error);
+      });
+    }
+    console.log(quote);
   };
 
   return (
@@ -27,18 +56,18 @@ const App = () => {
           <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            value={age}
+            value={category}
             label="Category"
             onChange={handleChange}
           >
-            <MenuItem value={1}>Random</MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value="random">Random</MenuItem>
+            <MenuItem value="technology">Technology</MenuItem>
+            <MenuItem value="history">History</MenuItem>
+            <MenuItem value="wisdom">Wisdom</MenuItem>
           </Select>
         </FormControl>
         <div>
-          <Button variant="contained" color="success">Generate</Button>
+          <Button variant="contained" color="success" onClick={buttonclick}>Generate</Button>
         </div>
       </div>
     </div>

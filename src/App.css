@@ -12,12 +12,13 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(2px);
 }
 .centerScreen {
+  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  min-height: 95vh;
 }
 .dropdownContainer {
   position: absolute;
@@ -27,8 +28,12 @@
   align-items: center;
   text-align: center;
 }
+.quote {
+  font-size: 30px;
+  color: white;
+  font-family: cursive;
+}
 .categoryLabel {
-  padding-right: 35px;
   font-family: cursive;
 }
 .App-logo {
